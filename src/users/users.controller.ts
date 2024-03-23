@@ -15,4 +15,10 @@ export class UsersController {
   async login(@CurrentUser() user: TokenPayload) {
     return await this.usersService.findAll();
   }
+
+  @Get('/get-me')
+  @UseGuards(JwtAuthGuard)
+  async getMe(@CurrentUser() user: TokenPayload) {
+    return user;
+  }
 }
