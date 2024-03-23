@@ -15,7 +15,7 @@ async function bootstrap() {
     bufferLogs: true,
     cors: true,
   });
-  app.setGlobalPrefix('v1');
+  app.setGlobalPrefix('api');
   app.useGlobalPipes(new ValidationPipe());
   app.useLogger(app.get(Logger));
   app.use(cookieParser()); // Middleware: Runs cookieParser() to attach Cookie in the request
