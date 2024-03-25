@@ -16,11 +16,7 @@ async function bootstrap() {
     cors: true,
   });
   app.setGlobalPrefix('api');
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-    }),
-  );
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.useLogger(app.get(Logger));
   app.use(cookieParser()); // Middleware: Runs cookieParser() to attach Cookie in the request
 
