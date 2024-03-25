@@ -1,5 +1,4 @@
-export const THESE_CREDENTIALS_DO_NOT_MATCH_OUR_RECORDS =
-  'These credentials do not match our records.';
+export const CREDENTIALS_ARE_INVALID = 'Credentials are invalid.';
 
 export const DOCUMENT_NOT_FOUND = 'Document not found.';
 

@@ -11,7 +11,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersRepository } from './users.repository';
 import {
   EMAIL_ALREADY_TAKEN,
-  THESE_CREDENTIALS_DO_NOT_MATCH_OUR_RECORDS,
+  CREDENTIALS_ARE_INVALID,
   USERNAME_ALREADY_TAKEN,
 } from 'src/common/constants/error.messages';
 
@@ -78,13 +78,10 @@ export class UsersService {
   }
 
   async verifyUser(email: string, password: string) {
-    console.log(email);
     const user = await this.usersRepository.findOne({ email });
     const passwordIsValid = await bcrypt.compare(password, user.password);
     if (!passwordIsValid) {
-      throw new UnauthorizedException(
-        THESE_CREDENTIALS_DO_NOT_MATCH_OUR_RECORDS,
-      );
+      throw new UnauthorizedException(CREDENTIALS_ARE_INVALID);
     }
     return user;
   }
