@@ -1,5 +1,6 @@
 import {
   Injectable,
+  InternalServerErrorException,
   Logger,
   UnauthorizedException,
   UnprocessableEntityException,
@@ -9,9 +10,10 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersRepository } from './users.repository';
 import {
-  EMAIL_ALREADY_EXISTS,
-  THESE_CREDENTIALS_DO_NOT_MATCH_OUR_RECORDS,
-} from 'src/common/constants/error-messages';
+  EMAIL_ALREADY_TAKEN,
+  CREDENTIALS_ARE_INVALID,
+  USERNAME_ALREADY_TAKEN,
+} from 'src/common/constants/error.messages';
 
 @Injectable()
 export class UsersService {
@@ -23,17 +25,28 @@ export class UsersService {
     return bcrypt.hash(password, 10);
   }
 
-  async create(createUserInput: CreateUserDto) {
+  async create(createUserDto: CreateUserDto) {
     try {
       return await this.usersRepository.create({
-        ...createUserInput,
-        password: await this.hashPassword(createUserInput.password),
+        ...createUserDto,
+        password: await this.hashPassword(createUserDto.password),
       });
     } catch (error) {
-      if (error.message.includes('E11000')) {
-        throw new UnprocessableEntityException(EMAIL_ALREADY_EXISTS);
+      if (
+        error.message.includes('E11000') &&
+        error.message.includes('email_1')
+      ) {
+        throw new UnprocessableEntityException(EMAIL_ALREADY_TAKEN);
       }
-      throw error;
+
+      if (
+        error.message.includes('E11000') &&
+        error.message.includes('username_1')
+      ) {
+        throw new UnprocessableEntityException(USERNAME_ALREADY_TAKEN);
+      }
+
+      throw new InternalServerErrorException();
     }
   }
 
@@ -45,18 +58,16 @@ export class UsersService {
     return this.usersRepository.findOne({ _id });
   }
 
-  async update(_id: string, updateUserInput: UpdateUserDto) {
-    if (updateUserInput.password) {
-      updateUserInput.password = await this.hashPassword(
-        updateUserInput.password,
-      );
+  async update(_id: string, updateUserDto: UpdateUserDto) {
+    if (updateUserDto.password) {
+      updateUserDto.password = await this.hashPassword(updateUserDto.password);
     }
 
     return this.usersRepository.findOneAndUpdate(
       { _id },
       {
         $set: {
-          ...updateUserInput,
+          ...updateUserDto,
         },
       },
     );
@@ -70,9 +81,7 @@ export class UsersService {
     const user = await this.usersRepository.findOne({ email });
     const passwordIsValid = await bcrypt.compare(password, user.password);
     if (!passwordIsValid) {
-      throw new UnauthorizedException(
-        THESE_CREDENTIALS_DO_NOT_MATCH_OUR_RECORDS,
-      );
+      throw new UnauthorizedException(CREDENTIALS_ARE_INVALID);
     }
     return user;
   }

@@ -12,6 +12,9 @@ export class User extends AbstractEntity {
   @Prop({ unique: true, index: true })
   username: string;
 
+  @Prop({ required: false })
+  name?: string;
+
   @Prop()
   password: string;
 }

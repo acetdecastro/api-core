@@ -1,7 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-local';
-import { THESE_CREDENTIALS_DO_NOT_MATCH_OUR_RECORDS } from 'src/common/constants/error-messages';
+import { CREDENTIALS_ARE_INVALID } from 'src/common/constants/error.messages';
 import { UsersService } from 'src/users/users.service';
 
 @Injectable()
@@ -16,9 +16,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     try {
       return await this.usersService.verifyUser(email, password);
     } catch (error) {
-      throw new UnauthorizedException(
-        THESE_CREDENTIALS_DO_NOT_MATCH_OUR_RECORDS,
-      );
+      throw new UnauthorizedException(CREDENTIALS_ARE_INVALID);
     }
   }
 }
