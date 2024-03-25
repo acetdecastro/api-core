@@ -16,7 +16,7 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { CurrentUser } from 'src/auth/current-user.decorator';
 import { TokenPayload } from 'src/auth/token-payload.interface';
 
-@ApiTags('Links')
+@ApiTags('links')
 @Controller('links')
 export class LinksController {
   constructor(private readonly linksService: LinksService) {}
