@@ -11,7 +11,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersRepository } from './users.repository';
 import {
   EMAIL_ALREADY_TAKEN,
-  CREDENTIALS_ARE_INVALID,
+  INVALID_CREDENTIALS,
   USERNAME_ALREADY_TAKEN,
 } from 'src/common/constants/error.messages';
 
@@ -81,7 +81,7 @@ export class UsersService {
     const user = await this.usersRepository.findOne({ email });
     const passwordIsValid = await bcrypt.compare(password, user.password);
     if (!passwordIsValid) {
-      throw new UnauthorizedException(CREDENTIALS_ARE_INVALID);
+      throw new UnauthorizedException(INVALID_CREDENTIALS);
     }
     return user;
   }

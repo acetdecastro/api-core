@@ -1,4 +1,4 @@
-export const CREDENTIALS_ARE_INVALID = 'Credentials are invalid.';
+export const INVALID_CREDENTIALS = 'Invalid credentials.';
 
 export const DOCUMENT_NOT_FOUND = 'Document not found.';
 
