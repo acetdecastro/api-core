@@ -29,6 +29,7 @@ export class UsersService {
     try {
       return await this.usersRepository.create({
         ...createUserDto,
+        emailVerified: null,
         password: await this.hashPassword(createUserDto.password),
       });
     } catch (error) {

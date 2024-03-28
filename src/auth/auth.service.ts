@@ -13,23 +13,17 @@ export class AuthService {
 
   async login(user: User) {
     const tokenPayload: TokenPayload = {
-      _id: user._id.toHexString(),
-      email: user.email,
-      name: user.name,
-      username: user.username,
+      ...user,
+      _id: user._id.toString(),
     };
 
     const token = this.jwtService.sign(tokenPayload);
 
-    const _user = {
-      _id: user._id.toString(),
-      email: user.email,
-      name: user.name,
-      username: user.username,
+    return {
+      ...user,
+      id: user._id.toString(),
       token,
     };
-
-    return _user;
   }
 
   verifyToken(token: string): TokenPayload {

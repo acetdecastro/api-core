@@ -3,4 +3,5 @@ export interface TokenPayload {
   email: string;
   username: string;
   name: string;
+  emailVerified: Date | null;
 }

@@ -11,12 +11,13 @@ import {
 import { LinksService } from './links.service';
 import { CreateLinkDto } from './dto/create-link.dto';
 import { UpdateLinkDto } from './dto/update-link.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { CurrentUser } from 'src/auth/current-user.decorator';
 import { TokenPayload } from 'src/auth/token-payload.interface';
 
-@ApiTags('Links')
+@ApiTags('links')
+@ApiBearerAuth()
 @Controller('links')
 export class LinksController {
   constructor(private readonly linksService: LinksService) {}
